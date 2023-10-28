@@ -30,6 +30,8 @@ class Homework1 extends Command
   public function handle(): int
   {
     $inputArraySize = '';
+    // for testing
+//    $inputArraySize = 5;
     while ($inputArraySize == '') {
       $inputArraySize = $this->ask('Array size ? ex.4');
       if ($inputArraySize < 1 || $inputArraySize > 10000) {
@@ -45,7 +47,11 @@ class Homework1 extends Command
 //      $inputArrayText = '7 15 12 3';
 //      $inputArrayText = '97 15 12 3';
 //      $inputArrayText = '3 7 12 15 12 3 12 3 15';
-//      $inputArrayText = '1 3 1 3';
+//      $inputArrayText = '9 88 78';
+//      $inputArrayText = '4 99 66 88';
+//      $inputArrayText = '1 6 2 2';
+//      $inputArrayText = '2 4 3 5 3';
+//      $inputArrayText = '2 3 3 5 4';
       if ($inputArrayText == '') {
         $this->error('Array Values cannot be empty.');
         continue;
@@ -74,27 +80,27 @@ class Homework1 extends Command
       if (!empty($ignoreKeys)) {
         $tempArray = array_filter($tempArray, fn($tempKey) => !in_array($tempKey, $ignoreKeys), ARRAY_FILTER_USE_KEY);
       }
-
       $swapValue = min($tempArray);
       $swapKey = $this->_arraySearchLast($swapValue, $tempArray);
 
       $toSwapKey = array_key_first($tempArray);
-      $ignoreKeys[] = $toSwapKey;
       $toSwapValue = $inputArray[$toSwapKey];
+      $ignoreKeys[] = $toSwapKey;
 
-      while ($swapValue == $toSwapValue) {
+      if ($swapValue == $toSwapValue) {
         if ($this->showProcess) {
-          $this->warn("Pass swap key $swapKey => $toSwapKey");
           $this->warn("Pass swap value $swapValue => $toSwapValue");
+          $this->warn("Pass swap key $swapKey => $toSwapKey");
         }
-        $toSwapKey++;
-        $ignoreKeys[] = $toSwapKey;
-        $toSwapValue = $inputArray[$toSwapKey];
+        if ($toSwapKey != $swapKey) {
+          $ignoreKeys[] = $swapKey;
+        }
+        continue;
       }
 
       if ($this->showProcess) {
-        $this->info("DO swap key $swapKey => $toSwapKey");
         $this->info("DO swap value $swapValue => $toSwapValue");
+        $this->info("DO swap key $swapKey => $toSwapKey");
         $this->line('before swap $inputArray : ');
         dump($inputArray);
       }
